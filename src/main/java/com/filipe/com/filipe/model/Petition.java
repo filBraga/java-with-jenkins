@@ -1,14 +1,19 @@
 package com.filipe.com.filipe.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Petition {
     private Long id;
     private String title;
     private String description;
+    private List<String> signatures = new ArrayList<>();
 
-    public Petition(Long id, String title, String description) {
+    public Petition(Long id, String title, String description, List<String> signatures) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.signatures = signatures;
     }
 
     // Getters and Setters
@@ -34,5 +39,13 @@ public class Petition {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void addSignature(String signature) {
+        this.signatures.add(signature);
+    }
+
+    public List<String> getSignatures() {
+        return signatures;
     }
 }
