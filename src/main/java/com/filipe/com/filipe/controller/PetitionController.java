@@ -2,13 +2,14 @@ package com.filipe.com.filipe.controller;
 
 import com.filipe.com.filipe.model.Petition;
 import com.filipe.com.filipe.service.PetitionService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/petitions")
+@Controller  // Change from @RestController to @Controller
+@RequestMapping("/petitions")  // Adjust URL mapping to match your views
 public class PetitionController {
     private final PetitionService petitionService;
 
@@ -16,36 +17,34 @@ public class PetitionController {
         this.petitionService = petitionService;
     }
 
-    // Create
-    @PostMapping
-    public Petition createPetition(@RequestBody Petition petition) {
-        return petitionService.createPetition(petition.getTitle(), petition.getDescription());
+    // Render the form to create a petition
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("petition", new Petition(null, "", ""));
+        return "create-petition";  // Return the view name (Thymeleaf template)
     }
 
-    // Read all
-    @GetMapping
-    public List<Petition> getAllPetitions() {
-        return petitionService.getAllPetitions();
+    // Handle the form submission to create a petition
+    @PostMapping("/create")
+    public String createPetition(@ModelAttribute Petition petition) {
+        petitionService.createPetition(petition.getTitle(), petition.getDescription());
+        return "redirect:/petitions/view";  // Redirect to the view page after creation
     }
 
-    // Read by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Petition> getPetitionById(@PathVariable Long id) {
-        Petition petition = petitionService.getPetitionById(id);
-        return petition != null ? ResponseEntity.ok(petition) : ResponseEntity.notFound().build();
-    }
-
-    // Update
-    @PutMapping("/{id}")
-    public ResponseEntity<Petition> updatePetition(@PathVariable Long id, @RequestBody Petition petition) {
-        Petition updatedPetition = petitionService.updatePetition(id, petition.getTitle(), petition.getDescription());
-        return updatedPetition != null ? ResponseEntity.ok(updatedPetition) : ResponseEntity.notFound().build();
-    }
-
-    // Delete
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePetition(@PathVariable Long id) {
-        boolean deleted = petitionService.deletePetition(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    // Render the page to view/search petitions
+    @GetMapping("/view")
+    public String viewPetitions(@RequestParam(value = "search", required = false) String search, Model model) {
+        List<Petition> petitions;
+        if (search != null && !search.isEmpty()) {
+            // Filter petitions by title
+            petitions = petitionService.getAllPetitions().stream()
+                    .filter(p -> p.getTitle().toLowerCase().contains(search.toLowerCase()))
+                    .toList();
+        } else {
+            petitions = petitionService.getAllPetitions();
+        }
+        model.addAttribute("petitions", petitions);
+        model.addAttribute("search", search);
+        return "view-petitions";  // Return the view name (Thymeleaf template)
     }
 }
