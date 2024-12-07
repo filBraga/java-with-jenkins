@@ -11,9 +11,11 @@
       method="post"
     >
       <label for="title">Title:</label>
+      <br />
       <input type="text" id="title" name="title" th:value="*{title}" required />
       <br />
       <label for="description">Description:</label>
+      <br />
       <textarea
         id="description"
         name="description"
@@ -23,7 +25,12 @@
       <br />
       <button type="submit">Submit</button>
     </form>
-    <a href="/petitions/view">View Petitions</a>
+    <br />
+    <a href="/petitions/view">All Petitions</a>
+    <br />
+    <a href="/petitions/create">Create a New Petition</a>
+    <br />
     <a href="/petitions/search">Search Petition</a>
+    <br />
   </body>
 </html>
