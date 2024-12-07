@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Petition Details</title>
+  </head>
+  <body>
+    <h1 th:text="${petition.title}"></h1>
+    <p th:text="${petition.description}"></p>
+
+    <h2>Sign the Petition</h2>
+    <form th:action="@{/petitions/{id}/sign(id=${petition.id})}" method="post">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+      <br />
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+      <br />
+      <button type="submit">Sign</button>
+    </form>
+
+    <div th:if="${successMessage}">
+      <p th:text="${successMessage}" style="color: green"></p>
+    </div>
+
+    <h2>Signatures</h2>
+    <ul>
+      <li
+        th:each="signature : ${petition.signatures}"
+        th:text="${signature}"
+      ></li>
+    </ul>
+
+    <a href="/petitions/view">Back to All Petitions</a>
+    <a href="/petitions/search">Search Petition</a>
+  </body>
+</html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>View All Petitions</title>
+    <title>Search Results</title>
   </head>
   <body>
-    <h1>All Petitions</h1>
+    <h1>Search Results</h1>
     <table>
       <thead>
         <tr>
@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr th:each="petition : ${petitions}">
+        <tr th:each="petition : ${results}">
           <td th:text="${petition.id}"></td>
           <td>
             <a
@@ -26,7 +26,6 @@
         </tr>
       </tbody>
     </table>
-    <a href="/petitions/create">Create a New Petition</a>
-    <a href="/petitions/search">Search Petition</a>
+    <a href="/petitions/search">Back to Search</a>
   </body>
 </html>
