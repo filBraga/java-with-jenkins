@@ -36,16 +36,11 @@ pipeline {
                                 artifacts: '**/target/*.war'
             }
         }
-        stage('Approve Deployment') {
-            steps {
-                input message: 'Deploy to production?', ok: 'Deploy'
-            }
-        }
         stage('Deploy') {
             steps {
-                sh 'docker build -f Dockerfile -t myapp .'
-                sh 'docker rm -f "myappcontainer" || true'
-                sh 'docker run --name "myappcontainer" -p 9090:8080 --detach myapp:latest'
+                sh 'sudo docker build -f Dockerfile -t myapp .'
+                sh 'sudo docker rm -f "myappcontainer" || true'
+                sh 'sudo docker run --name "myappcontainer" -p 9090:8080 --detach myapp:latest'
             }
         }
     }
