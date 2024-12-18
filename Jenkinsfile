@@ -10,6 +10,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/filBraga/java-with-jenkins.git'
             }
         }
+        stage('test maven') {
+            steps {
+                sh '/opt/apache-maven-3.9.9/bin/mvn --version'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn clean compile'
